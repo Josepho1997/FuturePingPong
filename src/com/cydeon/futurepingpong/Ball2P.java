@@ -64,7 +64,7 @@ public class Ball2P extends DynamicGameObject {
 	public static int UPPER_WALL_HIT_COUNTER = 0;
 	public static int LOWER_WALL_HIT_COUNTER = 0;
 	public static int USER_SCORE_COUNTER = 0;
-	public static int CPU_SCORE_COUNTER = 0;
+	public static int CPU_SCORE_COUNTER = 6;
 	public static int USER_PADDLE_HIT_COUNTER = 0;
 	public static int CPU_PADDLE_HIT_COUNTER = 0;
 	Random random = new Random();
@@ -208,6 +208,12 @@ public class Ball2P extends DynamicGameObject {
 	
 	public void stopBall() {
 		velocity.set(0, 0);
+	}
+	
+	public void reset() {
+		CPU_SCORE_COUNTER = 0;
+		USER_SCORE_COUNTER = 0;
+		ballmode = BALL_GAME_START;
 	}
 	
 	
