@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvBallVelocity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:text="Adjust the ball's initial velocity" />
+
+    <TextView
+        android:id="@+id/tvCPUPaddleVelocity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBallVelocity"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp"
+        android:text="Adjust the CPU's paddle's move velocity" />
+
+    <EditText
+        android:id="@+id/etBallVelocity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBallVelocity"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etCPUPaddleVelocity"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="Adjust the winning point" />
+
+    <EditText
+        android:id="@+id/etCPUPaddleVelocity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etBallVelocity"
+        android:layout_below="@+id/tvCPUPaddleVelocity"
+        android:ems="10"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/etWinningPoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etCPUPaddleVelocity"
+        android:layout_below="@+id/textView3"
+        android:ems="10"
+        android:inputType="number" >
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout>
