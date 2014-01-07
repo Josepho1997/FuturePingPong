@@ -113,10 +113,11 @@ public class MainMenuScreen extends GLScreen{
 	       // batcher.endBatch();
 	        
 	        batcher.beginBatch(Assets.menu);                 
-	        
+	        gl.glPushMatrix();
+	        gl.glColor4f(1, 1, 1, 1);
 	        batcher.drawSprite((1280 / 2), 500, 200 * 2, 114 * 2, Assets.play);
 	        batcher.drawSprite((1280 / 2), 250, 256 * 2, 88 * 2, Assets.settings);
-	                
+	        gl.glPopMatrix();
 	        batcher.endBatch();
 	        //Log.d("MainMenuLoaded", "MainMenu Loaded!!");
 	        
