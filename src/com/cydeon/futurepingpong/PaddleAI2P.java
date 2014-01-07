@@ -27,8 +27,8 @@ public class PaddleAI2P extends DynamicGameObject{
 	public static float PADDLE_HEIGHT = 13.7143f;
 	public static float HALF_PADDLE_HEIGHT = PADDLE_HEIGHT / 2;
 	public static float PADDLE_MOVE_SPEED;
+	public static boolean dontMove;
 	//public static Ball2P ball;
-	boolean dontMove;
 	
 	public PaddleAI2P(float x, float y, float width, float height) {
 		super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -40,9 +40,6 @@ public class PaddleAI2P extends DynamicGameObject{
 		//Log.d("String", Boolean.toString(dontMove) + Integer.toString(Ball2P.directionmode));
 		
 		/*Alpha*/
-			if(dontMove) {
-				velocity.set(0, 0);
-			}
 			
 			if(position.y + PADDLE_HEIGHT / 2 > World2P.WORLD_HEIGHT)
 				position.y = World2P.WORLD_HEIGHT - PADDLE_HEIGHT / 2;
@@ -51,7 +48,7 @@ public class PaddleAI2P extends DynamicGameObject{
 				position.y = 0 + PADDLE_HEIGHT / 2;
 		
 		/*1*/if(Ball2P.directionmode == Ball2P.BALL_DIRECTION_EAST) {
-			dontMove = false;
+				dontMove = false;
 		/*2*/if(World2P.ball.position.x > World2P.WORLD_HALF_LINE) {
 			
 		/*3a*/if(World2P.ball.position.y > position.y + 6) {
@@ -82,14 +79,17 @@ public class PaddleAI2P extends DynamicGameObject{
 	
 	public void moveToCenter(float MOVE_SPEED) {
 		//Log.d("Moving to Center", "Moving to center");
-		if(position.y < World2P.WORLD_CENTER_Y && !dontMove) {
+		if(position.y < World2P.WORLD_CENTER_Y & !dontMove) {
 			velocity.set(0, MOVE_SPEED);
+			Log.d("Moving up", "Moving up");
 		}
-		if(position.y > World2P.WORLD_CENTER_Y && !dontMove) {
+		if(position.y > World2P.WORLD_CENTER_Y & !dontMove) {
 			velocity.set(0, -MOVE_SPEED);
+			Log.d("Moving down", "moving down");
 		}
-		if(position.y == World2P.WORLD_CENTER_Y && World2P.ball.directionmode != Ball2P.BALL_DIRECTION_EAST) {
+		if(position.y + 1 > World2P.WORLD_CENTER_Y && position.y - 1 < World2P.WORLD_CENTER_Y) {
 			velocity.set(0, 0);
+			dontMove = true;
 		}
 	}
 	
