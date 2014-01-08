@@ -30,6 +30,7 @@ public class WorldRender {
 	static final float FRUSTUM_WIDTH = 80.0f; //
 	static final float FRUSTUM_HEIGHT = 48.0f; // Let goal be 3/7 of the height
 												// //Let Paddle be 2/3 of goal
+	public static String userpHCGO, cpupHCGO, lwHCGO, rwHCGO, bwHCGO, topwHCGO, scoreUserGO, scoreCPUGO;
 	GLGraphics glGraphics;
 	World2P world;
 	Camera2D cam;
@@ -37,6 +38,7 @@ public class WorldRender {
 	Boolean changerbColor, changerColor, changeqColor;
 	Random ran;
 	float ranR, ranG, ranB;
+	Ball2P ball;
 
 	public WorldRender(GLGraphics glGraphics, SpriteBatcher batcher,
 			World2P world) {
@@ -47,10 +49,20 @@ public class WorldRender {
 		changerbColor = false;
 		changerColor = false;
 		changeqColor = false;
+		ball = new Ball2P(3, 5, 4, 1);
 		ran = new Random();
 		ranR = ran.nextFloat();
 		ranG = ran.nextFloat();
 		ranB = ran.nextFloat();
+		
+		userpHCGO = "The ball bounced off your paddle: ";
+		cpupHCGO = "The ball bounced off the CPU's paddle: ";
+		lwHCGO = "The ball bounced off the left wall: ";
+		rwHCGO = "The ball bounced off the right wall: ";
+		bwHCGO = "The ball bounced off the bottom wall: ";
+		topwHCGO = "The ball bounced off the top wall: ";
+		scoreUserGO = "You scored ";
+		scoreCPUGO = "The computer scored ";
 	}
 
 	/*
@@ -98,6 +110,56 @@ public class WorldRender {
 		else
 			gl.glColor4f(ranR, ranB, ranG, 1.0f);
 		Assets.font.drawText(batcher, "Quit", World2P.WORLD_WIDTH / 2 - 8, 20, 4, 5);
+		gl.glPopMatrix();
+		batcher.endBatch();
+	}
+	
+	public void renderGameOver() {
+		cam.setViewportAndMatrices();
+		GL10 gl = glGraphics.getGL();
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		batcher.beginBatch(Assets.key);
+		gl.glPushMatrix();
+		if(Ball2P.CPU_SCORE_COUNTER == 7) {
+			Assets.font.drawText(batcher, "You lose!", (World2P.WORLD_WIDTH / 2) - 18, 40, 4, 5);
+			
+		} else {
+			Assets.font.drawText(batcher, "You win!", (World2P.WORLD_WIDTH / 2) - 16, 40, 4, 5);
+		}
+		Assets.font.drawText(batcher, "Score:", 2, 2, 2, 2.5f);
+		Assets.font.drawText(batcher, "You:" + Integer.toString(Ball2P.USER_SCORE_COUNTER), 17 ,2, 2, 2.5f);
+		Assets.font.drawText(batcher, "CPU:" + Integer.toString(Ball2P.CPU_SCORE_COUNTER), 30, 2, 2, 2.5f);
+		Assets.font.drawText(batcher, "Tap anywhere to continue", (World2P.WORLD_WIDTH / 2) - 24, World2P.WORLD_HEIGHT / 2, 2, 2.5f);
+		gl.glPopMatrix();
+		batcher.endBatch();
+	}
+	
+	public void renderStatsGameOver() {
+		cam.setViewportAndMatrices();
+		GL10 gl = glGraphics.getGL();
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		batcher.beginBatch(Assets.key);
+		gl.glPushMatrix();
+		gl.glColor4f(1, 1, 1, 1);
+		Assets.font.drawText(batcher, "Game Statistics", 26, 46, 2, 2.5f);
+		Assets.font.drawText(batcher, userpHCGO + Integer.toString(Ball2P.USER_PADDLE_HIT_COUNTER) + " times!", 2, 38, 1, 1.25f);
+		Assets.font.drawText(batcher, cpupHCGO + Integer.toString(Ball2P.CPU_PADDLE_HIT_COUNTER) + " times!", 2, 35, 1, 1.25f);
+		Assets.font.drawText(batcher, lwHCGO + Integer.toString(Ball2P.LEFT_WALL_HIT_COUNTER) + " times!", 2, 32, 1, 1.25f);
+		Assets.font.drawText(batcher, rwHCGO+ Integer.toString(Ball2P.RIGHT_WALL_HIT_COUNTER) + " times!", 2, 29, 1, 1.25f);
+		gl.glPopMatrix();
+		batcher.endBatch();
+		
+		batcher.beginBatch(Assets.key);
+		gl.glPushMatrix();
+		gl.glColor4f(1, 1, 1, 1);
+		Assets.font.drawText(batcher, scoreCPUGO + Integer.toString(Ball2P.CPU_SCORE_COUNTER) + " points!", 2, 26, 1, 1.25f);
+		Assets.font.drawText(batcher, scoreUserGO +Integer.toString(Ball2P.USER_SCORE_COUNTER) + " points!", 2, 23, 1, 1.25f);
+		Assets.font.drawText(batcher, topwHCGO+ Integer.toString(Ball2P.UPPER_WALL_HIT_COUNTER) + " times!", 2, 20, 1, 1.25f);
+		Assets.font.drawText(batcher, bwHCGO + Integer.toString(Ball2P.LOWER_WALL_HIT_COUNTER) + " times!", 2, 17, 1, 1.25f);
 		gl.glPopMatrix();
 		batcher.endBatch();
 	}
