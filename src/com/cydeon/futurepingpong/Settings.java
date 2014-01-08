@@ -35,6 +35,7 @@ public class Settings {
 	public static float[] rgbBall = {1.0f, 1.0f, 1.0f, 1.0f};
 	public static float[] rgbBackground = {1.0f, 1.0f, 1.0f, 1.0f};
 	public static float[] rgbPause = {1.0f, 1.0f, 1.0f, 1.0f};
+	public static int[] gameStats = {0, 0, 0, 0, 0, 0, 0, 0};
 
 	public final static String file = ".fpp";
 
@@ -57,6 +58,10 @@ public class Settings {
 			for(int c = 0; c < rgbPause.length; c++) {
 				rgbPause[c] = Float.parseFloat(in.readLine());
 			}
+			for(int d = 0; d < gameStats.length; d++) {
+				gameStats[d] = Integer.parseInt(in.readLine());
+			}
+			
 			Log.d("Log", Float.toString(rgbPaddle1[0]));
 			
 		} catch (IOException e) {
@@ -96,6 +101,10 @@ public class Settings {
 			}
 			for(int c = 0; c < rgbPause.length; c++) {
 				out.write(Float.toString(rgbPause[c]));
+				out.write("\n");
+			}
+			for(int d = 0; d < gameStats.length; d++) {
+				out.write(Integer.toString(gameStats[d]));
 				out.write("\n");
 			}
 
