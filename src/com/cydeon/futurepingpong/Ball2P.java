@@ -88,22 +88,27 @@ public class Ball2P extends DynamicGameObject {
 		if(position.y + HALF_BALL_MEASUREMENT > World2P.WORLD_HEIGHT) {
 			velocity.set(velocity.x, -velocity.y);
 			UPPER_WALL_HIT_COUNTER++;
+			Settings.gameStats[5]++;
 		}
 		if(position.y - HALF_BALL_MEASUREMENT < 0) {
 			velocity.set(velocity.x, -velocity.y);
+			Log.d("Lower wall counter", "Ball " + Integer.toString(LOWER_WALL_HIT_COUNTER));
 			LOWER_WALL_HIT_COUNTER++;
+			Settings.gameStats[4]++;
 		}
 		if(position.x + HALF_BALL_MEASUREMENT > World2P.WORLD_WIDTH &&
 			position.y - HALF_BALL_MEASUREMENT < (World2P.WORLD_HEIGHT / 2) - World2P.HALF_GOAL_SIZE ||
 			position.x + HALF_BALL_MEASUREMENT > World2P.WORLD_WIDTH && position.y + HALF_BALL_MEASUREMENT > (World2P.WORLD_HEIGHT / 2) + World2P.HALF_GOAL_SIZE) {
 				velocity.set(-velocity.x, velocity.y);
 				RIGHT_WALL_HIT_COUNTER++;
+				Settings.gameStats[3]++;
 		}
 		if(position.x - HALF_BALL_MEASUREMENT < 0 &&
 				position.y - HALF_BALL_MEASUREMENT < (World2P.WORLD_HEIGHT / 2) - World2P.HALF_GOAL_SIZE ||
 				position.x - HALF_BALL_MEASUREMENT < 0 && position.y + HALF_BALL_MEASUREMENT > (World2P.WORLD_HEIGHT / 2) + World2P.HALF_GOAL_SIZE) {
 			velocity.set(-velocity.x, velocity.y);
 			LEFT_WALL_HIT_COUNTER++;
+			Settings.gameStats[2]++;
 		}
 		
 		if(position.x + HALF_BALL_MEASUREMENT > World2P.WORLD_WIDTH &&
@@ -111,21 +116,57 @@ public class Ball2P extends DynamicGameObject {
 				 position.y + HALF_BALL_MEASUREMENT < (World2P.WORLD_HEIGHT / 2) + World2P.HALF_GOAL_SIZE) {
 					ballmode = BALL_WENT_IN_CPU_GOAL;
 					USER_SCORE_COUNTER++;
+					Settings.gameStats[6]++;
 			}
 		if(position.x - HALF_BALL_MEASUREMENT < 0 &&
 				position.y - HALF_BALL_MEASUREMENT > (World2P.WORLD_HEIGHT / 2) - World2P.HALF_GOAL_SIZE &&
 				 position.y + HALF_BALL_MEASUREMENT < (World2P.WORLD_HEIGHT / 2) + World2P.HALF_GOAL_SIZE) {
 					ballmode = BALL_WENT_IN_USER_GOAL;
 					CPU_SCORE_COUNTER++;
+					Settings.gameStats[7]++;
+					Log.d("CPU Goal", "CPU Goal: " + Integer.toString(CPU_SCORE_COUNTER));
 			}
 		
 		if(OverlapTester.overlapCircleRectangle(bbCircle, userPaddle.bounds)) {
 			physicmode = BALL_HIT_PADDLE_USER;
+			origin.set(position);
+			float mag = (float) (3.5 * Math.hypot(position.x, position.y));
+			angle = position.sub(userPaddle.position).angle();
+			position.set(origin);
+			float radians = angle * Vector2.TO_RADIANS;
+			//Log.d("User Mag", Float.toString(mag));
+			
+			velocity.x = (float) (Math.cos(radians)) * mag;
+			velocity.y = (float) (Math.sin(radians)) * mag;
+			if(velocity.x > 100 && velocity.x < 130| velocity.y > 100 && velocity.y < 130) {
+				velocity.x -= 40;
+				velocity.y -= 40;
+			}
+			if(velocity.x > 130 | velocity.y > 130) {
+				velocity.x -=70;
+				velocity.y -= 70;
+			}
+			nullifyPhysics();
+		//	Log.d("User Paddle", Float.toString(velocity.x) + ", " + Float.toString(velocity.y));
 			USER_PADDLE_HIT_COUNTER++;
+			Settings.gameStats[0]++;
 		}
 		if(OverlapTester.overlapCircleRectangle(bbCircle, cpuPaddle.bounds)) {
 			physicmode = BALL_HIT_PADDLE_CPU;
+			origin.set(position);
+			float mag = (float) (0.9 * Math.hypot(position.x, position.y));
+			angle = position.sub(cpuPaddle.position).angle();
+			position.set(origin);
+			float radians = angle * Vector2.TO_RADIANS;
+			//Log.d("CPU Mag", Float.toString(mag));
+
+			
+			velocity.x = (float) (Math.cos(radians)) * mag;
+			velocity.y = (float) (Math.sin(radians)) * mag;
+			nullifyPhysics();
+			//Log.d("CPU Paddle", Float.toString(velocity.x) + ", " + Float.toString(velocity.y));
 			CPU_PADDLE_HIT_COUNTER++;
+			Settings.gameStats[1]++;
 		}
 		if(velocity.x < 0) {
 			directionmode = BALL_DIRECTION_WEST;
@@ -161,39 +202,10 @@ public class Ball2P extends DynamicGameObject {
 			//Then change the mode to BALL_GAME_START.
 		}
 		if(physicmode == BALL_HIT_PADDLE_CPU) {
-			origin.set(position);
-			float mag = (float) (0.9 * Math.hypot(position.x, position.y));
-			angle = position.sub(cpuPaddle.position).angle();
-			position.set(origin);
-			float radians = angle * Vector2.TO_RADIANS;
-			//Log.d("CPU Mag", Float.toString(mag));
-
 			
-			velocity.x = (float) (Math.cos(radians)) * mag;
-			velocity.y = (float) (Math.sin(radians)) * mag;
-			nullifyPhysics();
-			//Log.d("CPU Paddle", Float.toString(velocity.x) + ", " + Float.toString(velocity.y));
 		}
 		if(physicmode == BALL_HIT_PADDLE_USER) {
-			origin.set(position);
-			float mag = (float) (3.5 * Math.hypot(position.x, position.y));
-			angle = position.sub(userPaddle.position).angle();
-			position.set(origin);
-			float radians = angle * Vector2.TO_RADIANS;
-			//Log.d("User Mag", Float.toString(mag));
 			
-			velocity.x = (float) (Math.cos(radians)) * mag;
-			velocity.y = (float) (Math.sin(radians)) * mag;
-			if(velocity.x > 100 && velocity.x < 130| velocity.y > 100 && velocity.y < 130) {
-				velocity.x -= 40;
-				velocity.y -= 40;
-			}
-			if(velocity.x > 130 | velocity.y > 130) {
-				velocity.x -=70;
-				velocity.y -= 70;
-			}
-			nullifyPhysics();
-		//	Log.d("User Paddle", Float.toString(velocity.x) + ", " + Float.toString(velocity.y));
 		}
 		
 		if(CPU_SCORE_COUNTER == 7|| USER_SCORE_COUNTER == 7) {
@@ -213,6 +225,11 @@ public class Ball2P extends DynamicGameObject {
 	public void reset() {
 		CPU_SCORE_COUNTER = 0;
 		USER_SCORE_COUNTER = 0;
+		LEFT_WALL_HIT_COUNTER = 0;
+		RIGHT_WALL_HIT_COUNTER = 0;
+		UPPER_WALL_HIT_COUNTER = 0;
+		LOWER_WALL_HIT_COUNTER = 0;
+		USER_PADDLE_HIT_COUNTER = 0;
 		ballmode = BALL_GAME_START;
 	}
 	
