@@ -51,6 +51,7 @@ public class GameScreen extends GLScreen {
 	static final int GAME_PAUSED = 2;
 	static final int GAME_LEVEL_END = 3;
 	static final int GAME_OVER = 4;
+	static final int GAME_SHOW_STATS = 5;
 	int state;
 	int userScoreint, cpuScoreInt;
 
@@ -94,6 +95,9 @@ public class GameScreen extends GLScreen {
 	        case GAME_OVER:
 	            updateGameOver();
 	            break;
+	        case GAME_SHOW_STATS:
+	        	updateGameShowStats();
+	        	break;
 	        }
 	}
 	
@@ -120,6 +124,7 @@ public class GameScreen extends GLScreen {
 				guiCam.touchToWorld(touchPoint);
 				if (OverlapTester.pointInRectangle(pauseBounds, touchPoint)) {
 					Log.d("Pause Bounds", "Pause Bounds");
+					Settings.save(game.getFileIO());
 					state = GAME_PAUSED;
 					return;
 				}
@@ -127,11 +132,10 @@ public class GameScreen extends GLScreen {
 			if (event.type == TouchEvent.TOUCH_UP) {
 				screenIsTouched = false;
 			}
-			
-			if (World2P.state == World2P.WORLD_STATE_GAME_OVER) {
-				state = GAME_OVER;
-			}
 
+		}
+		if (World2P.state == World2P.WORLD_STATE_GAME_OVER) {
+			state = GAME_OVER;
 		}
 		world.update(deltaTime, touchPoint);
 		/*if(userScoreint != Ball2P.USER_SCORE_COUNTER) {
@@ -162,6 +166,7 @@ public class GameScreen extends GLScreen {
 				}
 				if (OverlapTester.pointInRectangle(quitBounds, touchPoint)) {
 					renderer.changeqColor = false;
+					Settings.save(game.getFileIO());
 					World2P.ball.reset();
 					game.setScreen(new MainMenuScreen(game));
 					return;
@@ -205,6 +210,13 @@ public class GameScreen extends GLScreen {
 	}
 	
 	public void updateGameOver() {
+		 if(game.getInput().getTouchEvents().size() > 0) {
+			 state = GAME_SHOW_STATS;
+			 Settings.save(game.getFileIO());
+	        }
+	}
+	
+	public void updateGameShowStats() {
 		
 	}
 
@@ -222,6 +234,9 @@ public class GameScreen extends GLScreen {
 	        case GAME_OVER:
 	            presentGameOver();
 	            break;
+	        case GAME_SHOW_STATS:
+	        	presentGameShowStats();
+	        	break;
 	        }
 	}
 	
@@ -244,7 +259,17 @@ public class GameScreen extends GLScreen {
 	}
 	
 	public void presentGameOver() {
+		GL10 gl = glGraphics.getGL();
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
 		
+		guiCam.setViewportAndMatrices();
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT); // 5
+		gl.glClearColor(Settings.rgbBackground[0], Settings.rgbBackground[1], Settings.rgbBackground[2], 1.0f);
+		renderer.renderGameOver();
 	}
 
 	public void presentRunning(float deltaTime) {
@@ -271,8 +296,22 @@ public class GameScreen extends GLScreen {
 		Assets.font.drawText(batcher, "CPU:" + Integer.toString(Ball2P.CPU_SCORE_COUNTER), (World2P.WORLD_WIDTH / 2), World2P.WORLD_HEIGHT - 2.5f, 2, 2.5f);
 		gl.glPopMatrix();
 		batcher.endBatch();
-		
 	}
+	
+	public void presentGameShowStats() {
+		GL10 gl = glGraphics.getGL();
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
+		
+		guiCam.setViewportAndMatrices();
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT); // 5
+		gl.glClearColor(Settings.rgbBackground[0], Settings.rgbBackground[1], Settings.rgbBackground[2], 1.0f);
+		renderer.renderStatsGameOver();
+	}
+	
 
 	@Override
 	public void pause() {
@@ -285,6 +324,7 @@ public class GameScreen extends GLScreen {
 		// TODO Auto-generated method stub
 
 	}
+	
 
 	@Override
 	public void dispose() {
