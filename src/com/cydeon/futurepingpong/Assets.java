@@ -28,6 +28,7 @@ public class Assets {
 	public static TextureRegion backgroundRegion; */
 	
 	public static Texture gameitems;
+	public static Texture menuItems;
 	public static TextureRegion paddle;
 	public static TextureRegion back;
 	//public static TextureRegion soundOn;
@@ -37,6 +38,7 @@ public class Assets {
 	public static Texture menu;
 	public static TextureRegion play;
 	public static TextureRegion settings;
+	public static TextureRegion stats;
 	
 	public static Texture textItems;
 	public static TextureRegion touchToStart;
@@ -60,6 +62,7 @@ public class Assets {
 		gameitems = new Texture(game, "PongStuff.png");
 		menu = new Texture(game, "pongmenu.png");
 		textItems = new Texture(game, "textitems.png");
+		menuItems = new Texture(game, "menuitems.png");
 		back = new TextureRegion(menu, 0, 120 * 2, 120 * 2, 48 * 2);
 		//items = new Texture(game, "items.png");
 		ball = new TextureRegion(gameitems, 0, 0, 220, 220);
@@ -67,8 +70,8 @@ public class Assets {
 		//paddle2 = new TextureRegion(items, 140, 0, 144, 144);
 		//soundOn = new TextureRegion(items, 288, 0, 72, 72);
 		//soundOff = new TextureRegion(items, 360, 0, 72, 72);
-		play = new TextureRegion(menu, 0, 0, 200 * 2, 114 * 2);
-		settings = new TextureRegion(menu, 0, 168 * 2, 256 * 2, 88 * 2);
+		play = new TextureRegion(menuItems, 0, 0, 180, 108);
+		settings = new TextureRegion(menuItems, 0, 132, 360, 120);
 		touchToStart = new TextureRegion(textItems, 0, 0, 684, 108);
 		touchToResume = new TextureRegion(textItems, 0, 144, 684, 84);
 		paddle1Color = new TextureRegion(textItems, 0, 240, 576, 84);
@@ -80,6 +83,7 @@ public class Assets {
 		generateRandomTransperancy = new TextureRegion(textItems, 0, 888, 948, 84);
 		key = new Texture(game, "items.png");
 		font = new Font(key, 224, 0, 16, 16, 20);
+		stats = new TextureRegion(menuItems, 0, 288, 216, 84);
 	}
 	
 	public static void reload() {

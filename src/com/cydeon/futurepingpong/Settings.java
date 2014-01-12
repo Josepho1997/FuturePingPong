@@ -30,11 +30,11 @@ import com.badlogic.androidgames.framework.FileIO;
 
 public class Settings {
 	public static boolean soundEnabled = true;
-	public static float[] rgbPaddle1 = {1.0f, 1.0f, 1.0f, 1.0f};
-	public static float[] rgbPaddle2 = {1.0f, 1.0f, 1.0f, 1.0f};
-	public static float[] rgbBall = {1.0f, 1.0f, 1.0f, 1.0f};
-	public static float[] rgbBackground = {1.0f, 1.0f, 1.0f, 1.0f};
-	public static float[] rgbPause = {1.0f, 1.0f, 1.0f, 1.0f};
+	public static float[] rgbPaddle1 = {0.93f, 0.2f, 0.3f, 1.0f};
+	public static float[] rgbPaddle2 = {0.34f, 0.64f, 0.37f, 1.0f};
+	public static float[] rgbBall = {0.63f, 0.56f, 0.95f, 1.0f};
+	public static float[] rgbBackground = {0.43f, 0.23f, 0.64f, 1.0f};
+	public static float[] rgbPause = {0.24f, 0.63f, 0.23f, 1.0f};
 	public static int[] gameStats = {0, 0, 0, 0, 0, 0, 0, 0};
 
 	public final static String file = ".fpp";

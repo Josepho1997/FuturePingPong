@@ -32,7 +32,7 @@ import com.badlogic.androidgames.framework.math.OverlapTester;
 import com.badlogic.androidgames.framework.math.Rectangle;
 import com.badlogic.androidgames.framework.math.Vector2;
 
-public class BallScreen extends GLScreen{
+public class BallScreen extends GLScreen {
 	SpriteBatcher batcher;
 	Camera2D guiCam;
 	Random ran;

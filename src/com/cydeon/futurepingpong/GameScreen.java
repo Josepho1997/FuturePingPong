@@ -44,7 +44,7 @@ public class GameScreen extends GLScreen {
 	Vector2 newV;
 	Ball2P ball;
 	Paddle2P paddle;
-	Rectangle pauseBounds, resetBallBounds, resumeBounds, quitBounds;
+	Rectangle pauseBounds, resetBallBounds, resumeBounds, quitBounds, restartBounds, returnToMenuBounds;
 	public static Boolean screenIsTouched, irbb, irb, iqb;
 	static final int GAME_READY = 0;
 	static final int GAME_RUNNING = 1;
@@ -76,6 +76,8 @@ public class GameScreen extends GLScreen {
 		resetBallBounds = new Rectangle(World2P.WORLD_WIDTH / 2 - 18, 35, 40, 10);
 		resumeBounds = new Rectangle(World2P.WORLD_WIDTH / 2 - 12, 25, 24, 10);
 		quitBounds = new Rectangle(World2P.WORLD_WIDTH / 2 - 8, 15, 16, 10);
+		restartBounds = new Rectangle(15, 0, 12, 5);
+		returnToMenuBounds = new Rectangle(40, 0, 24, 5);
 		state = GAME_READY;
 		userScoreint = Ball2P.USER_SCORE_COUNTER;
 		cpuScoreInt = Ball2P.CPU_SCORE_COUNTER;
@@ -102,9 +104,14 @@ public class GameScreen extends GLScreen {
 	}
 	
 	public void updateReady() {
-		 if(game.getInput().getTouchEvents().size() > 0) {
-	            state = GAME_RUNNING;
-	        }
+		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
+		int len = touchEvents.size();
+		for (int i = 0; i < len; i++) {
+			TouchEvent event = touchEvents.get(i);
+			if(event.type == TouchEvent.TOUCH_DOWN) {
+				state = GAME_RUNNING;
+			}
+		}
 	}
 	
 	public void updateRunning(float deltaTime) {
@@ -217,7 +224,23 @@ public class GameScreen extends GLScreen {
 	}
 	
 	public void updateGameShowStats() {
-		
+		List<TouchEvent> touchEvents = game.getInput().getTouchEvents();
+		int len = touchEvents.size();
+		for (int i = 0; i < len; i++) {
+			TouchEvent event = touchEvents.get(i);
+			if (event.type == TouchEvent.TOUCH_UP) {
+				touchPoint.set(event.x, event.y);
+				guiCam.touchToWorld(touchPoint);
+				if(OverlapTester.pointInRectangle(restartBounds, touchPoint)) {
+					ball.reset();
+					state = GAME_READY;
+				}
+				if(OverlapTester.pointInRectangle(returnToMenuBounds, touchPoint)) {
+					ball.reset();
+					game.setScreen(new MainMenuScreen(game));
+				}
+			}
+		}
 	}
 
 	public void present(float deltaTime) {
@@ -241,7 +264,20 @@ public class GameScreen extends GLScreen {
 	}
 	
 	public void presentReady() {
+		GL10 gl = glGraphics.getGL();
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		gl.glEnable(GL10.GL_TEXTURE_2D);
 		
+		guiCam.setViewportAndMatrices();
+		gl.glEnable(GL10.GL_BLEND);
+		gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+		gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT); // 5
+		gl.glClearColor(Settings.rgbBackground[0], Settings.rgbBackground[1], Settings.rgbBackground[2], 1.0f);
+		renderer.render();
+		batcher.beginBatch(Assets.textItems);
+		batcher.drawSprite(World2P.WORLD_WIDTH / 2, 5, 684 / 20, 108 / 20, Assets.touchToStart);
+		batcher.endBatch();
 	}
 	
 	public void presentPaused() {

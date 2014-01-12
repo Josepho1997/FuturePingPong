@@ -64,7 +64,7 @@ public class Ball2P extends DynamicGameObject {
 	public static int UPPER_WALL_HIT_COUNTER = 0;
 	public static int LOWER_WALL_HIT_COUNTER = 0;
 	public static int USER_SCORE_COUNTER = 0;
-	public static int CPU_SCORE_COUNTER = 6;
+	public static int CPU_SCORE_COUNTER = 0;
 	public static int USER_PADDLE_HIT_COUNTER = 0;
 	public static int CPU_PADDLE_HIT_COUNTER = 0;
 	Random random = new Random();
@@ -231,6 +231,7 @@ public class Ball2P extends DynamicGameObject {
 		LOWER_WALL_HIT_COUNTER = 0;
 		USER_PADDLE_HIT_COUNTER = 0;
 		ballmode = BALL_GAME_START;
+		World2P.state = World2P.WORLD_STATE_RUNNING;
 	}
 	
 	

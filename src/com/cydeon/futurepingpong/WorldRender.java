@@ -160,6 +160,8 @@ public class WorldRender {
 		Assets.font.drawText(batcher, scoreUserGO +Integer.toString(Ball2P.USER_SCORE_COUNTER) + " points!", 2, 23, 1, 1.25f);
 		Assets.font.drawText(batcher, topwHCGO+ Integer.toString(Ball2P.UPPER_WALL_HIT_COUNTER) + " times!", 2, 20, 1, 1.25f);
 		Assets.font.drawText(batcher, bwHCGO + Integer.toString(Ball2P.LOWER_WALL_HIT_COUNTER) + " times!", 2, 17, 1, 1.25f);
+		Assets.font.drawText(batcher, "Back to Menu", 40, 2, 2, 2.5f);
+		Assets.font.drawText(batcher, "Replay", 15, 2, 2, 2.5f);
 		gl.glPopMatrix();
 		batcher.endBatch();
 	}
@@ -178,8 +180,10 @@ public class WorldRender {
 
 		batcher.beginBatch(Assets.gameitems);
 		gl.glPushMatrix();
-		gl.glColor4f(0.3f, 0.3f, 0.6f, 0.2f);
+		gl.glColor4f(0.99f, 0.7f, 0, 0.2f);
 		batcher.drawSprite(1, World2P.WORLD_HEIGHT / 2, 2, World2P.GOAL_SIZE,
+				Assets.paddle);
+		batcher.drawSprite(World2P.WORLD_WIDTH - 1, World2P.WORLD_HEIGHT / 2, 2, World2P.GOAL_SIZE,
 				Assets.paddle);
 		gl.glPopMatrix();
 		batcher.endBatch();

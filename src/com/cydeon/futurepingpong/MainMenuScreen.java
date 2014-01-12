@@ -41,6 +41,7 @@ public class MainMenuScreen extends GLScreen{
 	Rectangle soundBounds;
 	Rectangle playBounds;
 	Rectangle settingsBounds;
+	Rectangle ranBounds;
 	Vector2 touchPoint;
 	World2P world;
 	WorldRender renderer;
@@ -50,8 +51,9 @@ public class MainMenuScreen extends GLScreen{
 		guiCam = new Camera2D(glGraphics, 1280, 768);
 		batcher = new SpriteBatcher(glGraphics, 100);
 		//soundBounds = new Rectangle();
-		playBounds = new Rectangle((1280 / 2) -200, 500 - 114, 600, 114 * 3);
-		settingsBounds = new Rectangle((1280 / 2) - (84 * 2) , 250, 256 * 2, 88);
+		playBounds = new Rectangle(0, 536, 200 * 2, 114 * 2);
+		settingsBounds = new Rectangle(0, 362, 256 * 2, 88 * 2);
+		ranBounds = new Rectangle(0, 244, 216 * 1.5f, 84 * 1.5f);
 		touchPoint = new Vector2();
 		world = new World2P();
 		renderer = new WorldRender(glGraphics, batcher, world);
@@ -80,6 +82,10 @@ public class MainMenuScreen extends GLScreen{
                 if(OverlapTester.pointInRectangle(settingsBounds, touchPoint)) {
                 	game.setScreen(new SettingsScreen(game));
                 	return;
+                }
+                
+                if(OverlapTester.pointInRectangle(ranBounds, touchPoint)) {
+                	game.setScreen(new StatisticScreen(game));
                 }
             }
         }
@@ -112,11 +118,12 @@ public class MainMenuScreen extends GLScreen{
 	        
 	       // batcher.endBatch();
 	        
-	        batcher.beginBatch(Assets.menu);                 
+	        batcher.beginBatch(Assets.menuItems);                 
 	        gl.glPushMatrix();
 	        gl.glColor4f(1, 1, 1, 1);
-	        batcher.drawSprite((1280 / 2), 500, 200 * 2, 114 * 2, Assets.play);
-	        batcher.drawSprite((1280 / 2), 250, 256 * 2, 88 * 2, Assets.settings);
+	        batcher.drawSprite(200, 650, 200 * 2, 114 * 2, Assets.play);
+	        batcher.drawSprite(256, 450, 256 * 2, 88 * 2, Assets.settings);
+	        batcher.drawSprite(164, 300, 216 * 1.5f, 84 * 1.5f, Assets.stats);
 	        gl.glPopMatrix();
 	        batcher.endBatch();
 	        //Log.d("MainMenuLoaded", "MainMenu Loaded!!");
